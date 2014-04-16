@@ -84,4 +84,30 @@ describe "Range With Gaps" do
     r << 22
     r.should == RangeWithGaps.new(1..6, 8..18, 20..22, 40..42, 44..44, 55..70, 200..200)
   end
+  
+  it "gaps" do
+    r = RangeWithGaps.new(1..5, 8..18)
+    g = r.gaps
+    g.should be == RangeWithGaps.new(6..7)
+    
+    
+    r.add [40..50, 60..70]
+    g = r.gaps
+    g.should be == RangeWithGaps.new(6..7, 19..39, 51..59)
+    
+    # Add overlapping range
+    r.add [35..45]
+    g = r.gaps
+    g.should be == RangeWithGaps.new(6..7, 19..34, 51..59)
+    
+    r = RangeWithGaps.new 1..5, 7..8
+    g = r.gaps
+    g.should be ==  RangeWithGaps.new(6..6)
+    
+    
+    r.delete 7..8
+    g = r.gaps
+    g.should == RangeWithGaps.new
+    
+  end
 end

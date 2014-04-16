@@ -90,6 +90,27 @@ class RangeWithGaps
   def empty?
     @ranges.empty?
   end
+  
+  def gaps
+    gaps = RangeWithGaps.new
+    @ranges.each_with_index  {|r, i|
+      a =  (@ranges[i].last).succ
+
+      if @ranges[i+1]
+        first_elem_in_next_range = @ranges[i+1].first
+   
+        while (a.succ < first_elem_in_next_range)
+          a = a.succ
+        end
+        
+        # range is non-inclusive of start of next range
+        g = RangeWithMath.from_range Range.new (@ranges[i].last).succ , a
+        gaps.add(g)
+      end
+    }
+    gaps
+  end
+  
 
   private
 
